@@ -1,1 +1,1 @@
-# infinite-scroll
+# infinite-scroll-js-only
