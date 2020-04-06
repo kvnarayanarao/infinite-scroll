@@ -55,18 +55,51 @@ var mySingleton = (function () {
         })
         .catch(err => { isFetching = false;})
     }   
-
+    function lastUpdatedInfo (creationDate){
+        var date1 = new Date();
+        var date2 = new Date(creationDate);
+        var diff = date1 - date2;
+        var d, h, m, s;
+        s = Math.floor(diff / 1000);
+        m = Math.floor(s / 60);
+        s = s % 60;
+        h = Math.floor(m / 60);
+        m = m % 60;
+        d = Math.floor(h / 24);
+        h = h % 24;
+        var displayText = "";
+        if(d > 0 ){
+            displayText = d + (d == 1 ? " day" : " days");
+        }else{
+            if(h > 0){
+             displayText = h + (h == 1 ? " hour" : " hours");
+            }else{
+                if(m > 0){
+                    displayText = m + (m == 1 ? " minute" : " minutes");
+                }else{
+                    displayText = s + (s == 1 ? " second" : " seconds");
+                }
+            }
+        }
+        // var dDisplay = d > 0 ? d + (d == 1 ? " day " : " days ") : "";
+        // var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours ") : "";
+        // var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes ") : "";
+        // var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+        // return dDisplay + hDisplay + mDisplay + sDisplay + " ago";
+        return displayText +" ago";   
+     }
     // render message list from the given response and append to container
     function render(messages){
         var messageHTML ="";
         messages.forEach(message => {
+            message.updatedTimeConverted = lastUpdatedInfo(message.updated);
             messageHTML += `<div class="message">
                         <div class="userDetails">
                             <div class="userImage" style="background-image: url(${baseUrl}${message.author.photoUrl})">
                             </div>
                             <div class="userAuthor">
                                 <p class="userName">${message.author.name}</p>
-                                <p class="userUpdated">${message.updated}</p>
+                                <p class="userUpdated">${message.updatedTimeConverted}</p>
                             </div>
                         </div>
                         <div class="userContent" title="${message.content}">
