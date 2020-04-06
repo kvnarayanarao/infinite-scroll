@@ -3,7 +3,6 @@
     <head>
         <meta name="viewport" content="width=device-width,height=device-height,user-scalable=no,initial-scale=1,maximum-scale=1" />
         <link rel="stylesheet" href="css/styles.css">
-        <script src="js/swiped-events.js"></script>
 		<title>Infinite scroll</title>
     </head>
     <body class="infnite">
@@ -13,73 +12,10 @@
                     <label>Messages</label>
                 </div>
                 <div id="list"></div>
-                <div id="loader">Load More</div>
+                <div id="loader" class="loader"> </div>
             </div>
         </div>
     </body>
-    <script>
-        const listContainer = document.getElementById('list');
-        list = '';
-        var baseUrl ='https://message-list.appspot.com'
-        var messageUrl = 'https://message-list.appspot.com/messages';
-        var isFetching = false;
-
-        let loadMore = (entries) => {
-            const target = entries[0];
-            if (target.isIntersecting) {
-                !isFetching && loadMessages()
-            }
-        }
-
-        function loadMessages() {
-            isFetching = true;
-            fetch(messageUrl)
-            .then(response => {
-                return response.json();
-            })
-            .then(data => {
-                isFetching = false;
-                messageUrl = "https://message-list.appspot.com/messages?pageToken="+data.pageToken;
-                const stars = data.messages || []; 
-                stars.forEach(star => {
-                    list += `<div class="message">
-                                <div class="userDetails">
-                                    <div class="userImage">
-                                        <img src="${baseUrl}${star.author.photoUrl}"></img>
-                                    </div>
-                                    <div class="userDetails">
-                                        <p class="userName">${star.author.name}</p>
-                                        <p class="userUpdated">${star.updated}</p>
-                                    </div>
-                                </div>
-                                <div class="userContent" title="${star.content}">
-                                    ${star.content}
-                                </div>
-                            </div>`;
-                });
-                listContainer.innerHTML = list;
-            })
-            .catch(err => { isFetching = false;})
-        }
-        loadMessages();
-
-        let options = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 1.0
-        };
-
-        let observer = new IntersectionObserver(loadMore, options);
-        let target = document.querySelector('#loader');
-        observer.observe(target);
-        
-        window.onload = function() {
-            document.addEventListener('swiped-right', function(e) {
-            console.log(e.type);
-            console.log(e.target);
-            e.target.closest("div.message").classList.add("hide");
-            //e.target.innerHTML = e.type;
-            });
-        }
-    </script>
+    <script src="js/infinite-scroll.js"></script>
+    <script src="js/swiped-events.js"></script>
 </html>
