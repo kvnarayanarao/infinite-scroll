@@ -9,6 +9,6 @@
   "author": "Narayana",
   "license": "ISC",
   "dependencies": {
-    "http-server": "^0.12.0"
+    "http-server": "^14.1.1"
   }
 }
